@@ -94,3 +94,39 @@ where ename='SMITH'
 select ename ,sal
 from EMP
 where sal not between 1500 and 2850
+
+
+---------------- 2nd assign --------------------
+
+--1. Retrieve a list of MANAGERS.
+Select ename,job
+FROM EMP
+WHERE job='MANAGER'
+
+--2. Find out salary of both MILLER and SMITH. 
+select ename,sal
+from EMP
+where ename IN('MILLER','SMITH')
+
+--3. Find out the names and salaries of all employees earning more than 1000 per month.
+select ename,sal
+from EMP
+WHERE SAL > 1000
+
+--4. Display the names and salaries of all employees except JAMES.
+select ename,sal
+from EMP
+where   ename <> 'JAMES'
+
+--5. Find out the details of employees whose names begin with ‘S’
+select *
+from EMP
+where ename LIKE 'A%'
+
+--6. Find out the names of all employees that have ‘A’ anywhere in their name. 
+select ename
+from EMP
+where ename like '%a%'
+
+--7. Find out the names of all employees that have ‘L’ as their third character in 
+select ename from EMP WHERE 
