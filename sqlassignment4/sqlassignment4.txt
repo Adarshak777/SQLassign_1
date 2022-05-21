@@ -1,0 +1,84 @@
+-------------------- assignment-4 -------------------
+
+begin
+declare @salary float = 28500;
+declare @SAL float,@HRA float,@DA float,@PF float,@IT float
+declare @Deductions float, @GrossSAlary float, @NetSalary float
+
+--a)HRA  as 10% Of sal
+
+set @HRA = ((@salary)*10/100)
+print 'HRA salary is : '+''+cast(@HRA as varchar(15))
+
+--b)DA as  20% of sal
+
+set @DA =((@salary)*20/100)
+print 'DA salary is : '+''+cast(@DA as varchar(15))
+
+--c)PF as 8% of sal
+
+set @PF =((@salary)*8/100)
+print 'PF salary is : '+''+cast(@PF as varchar(15))
+
+
+
+--d)IT as 5% of sal
+
+set @IT =((@salary)*5/100)
+print 'IT salary is : '+''+cast(@IT as varchar(15))
+
+
+--e)Deductions as sum of PF and IT
+
+set @Deductions = @PF+@IT
+print 'Deductions is : '+''+cast(@Deductions as varchar(15))
+
+
+--f)Gross Salary as sum of SAL,HRA,DA and Deductions
+
+set @SAL = @salary -(@HRA+@DA+@Deductions)
+set @GrossSAlary = @SAL+(@HRA+@DA+@Deductions)
+print 'Gross Salary is : '+''+cast(@GrossSAlary as varchar(15))
+
+
+--g)Net salary as  Gross salary- Deduction
+
+set @NetSalary = @GrossSAlary-@Deductions
+print 'Net Salary is : '+''+cast(@NetSalary as varchar(15))
+end
+
+--2.Write a T-SQL Program to find the factorial of a given number.
+
+begin
+	declare @num int
+	declare @factorial int
+	set @num=5
+	set @factorial=1
+while @num>0
+	begin
+		set @factorial=@factorial*@num
+		set @num=@num-1
+	end
+	print 'Factorial of a given number is : '+cast(@factorial as varchar)
+	
+end
+
+--3.Create a stored procedure to generate multiplication tables up to a given number.
+
+create or alter proc Multiplication_Table (@num1 int)
+as
+begin
+ declare @num2 int = 1, @result int
+  
+  while(@num2<=10)
+  begin
+    set @result = @num1 * @num2
+	print @result
+
+  set @num2 = @num2+1
+  end
+  
+
+
+exec Multiplication_Table @num1=20
+end
