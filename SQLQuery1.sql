@@ -128,5 +128,198 @@ select ename
 from EMP
 where ename like '%a%'
 
---7. Find out the names of all employees that have ‘L’ as their third character in 
-select ename from EMP WHERE 
+--7. Find out the names of all employees that have ‘L’ as their third character in their name.
+select ename from EMP where ename like '__L%'
+
+--8. Find out the names of the employees whose name begin with ‘A’ or ‘M’.
+select ename
+from EMP
+where ename LIKE 'A%' OR ename LIKE 'M%'
+
+--9. Compute yearly salary of SMITH. 
+select ename,sal*12 as "YEAR SAL"
+from EMP
+where ename='SMITH'
+
+--10. Compute daily salary of JONES. 
+SELECT ename, sal/30 as "dailysalary"
+from EMP
+WHERE ename = 'JONES'
+
+--11. Calculate the total monthly salary of all employees. 
+select ename, sum(sal) as "total_salary"
+from EMP
+group by ename,job
+
+--12. Print the average annual salary. 
+select ename, avg(sal*12) as "average salary"
+from EMP
+group by ename,job
+
+--13. Select the name, job, salary, department number of all employees except 
+select ename,job ,sal,DEPTNO
+from EMP
+group by  ename,job ,sal,DEPTNO
+
+
+--14. SALESMAN from department number 30. 
+select ename,job,deptno
+from EMP
+where job = 'SALESMAN' AND deptno = 30
+
+--15. List unique departments of the EMP table.
+SELECT DISTINCT(deptname) 
+FROM EMP INNER JOIN DEPT ON EMP.DEPTNO=DEPT.DEPTNO;
+
+ --16.List the name and salary of employees who earn more than 1500 and are in department 10 or 30. Label the columns Employee and Monthly Salary respectively.
+  select ename as'employee name', sal as'Mounthly salary' from emp 
+ where sal>1500 and deptno in(10,30)
+
+-------------- assignment -3 -----------------------
+
+--1. List the name and salary for all employees whose salary is not in the range of 1500 and 2850
+select ename, sal from emp where sal not between 1500 and 2850
+. 
+--2. Display the name and job of all employees who do not have a MANAGER. 
+select ename, job from emp where mngr is null
+
+
+--3. Display the name, job, and salary of all the employees whose job is MANAGER or ANALYST and their salary is not equal to 1000, 3000, or 5000.
+select ename,job,sal from emp where job in('MANAGER','ANALYST') and sal not in(1000,3000,5000)
+                                                                                    
+--4. Display the name, salary and commission for all employees whose commission amount is greater than their salary increased by 10%.
+
+select ename,sal,commsn from emp where commsn > sal+sal*.10
+ 
+--5. Display the name of all employees who have two Ls in their name and are in department 30 or their manager is 7782. 
+ select ename,job from emp where ename like '%LL%' and deptno in (30) or mngr =7782
+
+
+--6. Display the names of employees with experience of over 10 years and under 20 yrs. Count the total number of employees. 
+ update emp set hiredate='28-SEP-10' where empno in(7654,7900)
+
+  SELECT COUNT(hiredate) AS no_of_employees ,ename
+ FROM EMP
+ WHERE CONVERT(varchar(3),DATEDIFF(YEAR, HIREDATE, GETDATE()))>10
+ AND CONVERT(varchar(3),DATEDIFF(YEAR, HIREDATE, GETDATE()))<20
+ GROUP BY ename
+  
+--7. Retrieve the names of departments in ascending order and their employees in descending order. 
+ select deptname,ename from DEPT join emp on dept.DeptNo = emp.deptno
+ order by deptname asc , ename desc
+
+
+--8. Find out experience of MILLER. 
+select convert(varchar(5),datediff(year,hiredate,getdate())) as'Experience'
+from emp where ename='MILLER'
+
+--9. How many different departments are there in the employee table.
+select deptname,count(*) as 'no of departments' from emp join dept on
+ dept.deptno= emp.deptno
+ group by deptname 
+
+
+--10. Find out which employee either work in SALES or RESEARCH department. 
+
+ select ename, deptname from emp join dept on emp.deptno=dept.DeptNo 
+ where DeptName in('SALES','RESEARCH')
+
+--11. Print the name and average salary of each department. 
+ select deptname, avg(sal) as AverageSalary from emp join dept on emp.deptno=dept.DeptNo
+ group by DeptName
+
+--12. Select the minimum and maximum salary from employee table.
+select min(sal) as minimumsalary, max(sal) as maximumsalary from emp 
+
+--13. Select the minimum and maximum salaries from each department in employee table. 
+ select deptname,min(sal) as minimum_salary,max(sal) as maximum_salary from emp join dept
+ on emp.deptno=dept.DeptNo 
+ group by deptname 
+
+--14. Select the details of employees whose salary is below 1000 and job is CLERK. 
+select * from emp where sal<1000 and job = 'CLERK'
+
+
+-------------------- assignment-4 -------------------
+
+begin
+declare @salary float = 50000;
+declare @SAL float,@HRA float,@DA float,@PF float,@IT float
+declare @Deductions float, @GrossSAlary float, @NetSalary float
+
+--a)HRA  as 10% Of sal
+
+set @HRA = ((@salary)*10/100)
+print 'HRA salary is : '+''+cast(@HRA as varchar(15))
+
+--b)DA as  20% of sal
+
+set @DA =((@salary)*20/100)
+print 'DA salary is : '+''+cast(@DA as varchar(15))
+
+--c)PF as 8% of sal
+
+set @PF =((@salary)*8/100)
+print 'PF salary is : '+''+cast(@PF as varchar(15))
+
+
+
+--d)IT as 5% of sal
+
+set @IT =((@salary)*5/100)
+print 'IT salary is : '+''+cast(@IT as varchar(15))
+
+
+--e)Deductions as sum of PF and IT
+
+set @Deductions = @PF+@IT
+print 'Deductions is : '+''+cast(@Deductions as varchar(15))
+
+
+--f)Gross Salary as sum of SAL,HRA,DA and Deductions
+
+set @SAL = @salary -(@HRA+@DA+@Deductions)
+set @GrossSAlary = @SAL+(@HRA+@DA+@Deductions)
+print 'Gross Salary is : '+''+cast(@GrossSAlary as varchar(15))
+
+
+--g)Net salary as  Gross salary- Deduction
+
+set @NetSalary = @GrossSAlary-@Deductions
+print 'Net Salary is : '+''+cast(@NetSalary as varchar(15))
+end
+
+--2.Write a T-SQL Program to find the factorial of a given number.
+
+begin
+	declare @num int
+	declare @factorial int
+	set @num=13
+	set @factorial=1
+while @num>0
+	begin
+		set @factorial=@factorial*@num
+		set @num=@num-1
+	end
+	print 'Factorial of a given number is : '+cast(@factorial as varchar)
+	
+end
+
+--3.Create a stored procedure to generate multiplication tables up to a given number.
+
+create or alter proc Multiplication_Table (@num1 int)
+as
+begin
+ declare @num2 int = 1, @result int
+  
+  while(@num2<=10)
+  begin
+    set @result = @num1 * @num2
+	print @result
+
+  set @num2 = @num2+1
+  end
+  end
+
+
+exec Multiplication_Table @num1=9
